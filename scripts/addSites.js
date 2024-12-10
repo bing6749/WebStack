@@ -1,5 +1,6 @@
-const axios = require('axios');
+const axios = require('axios'); // 引入 axios，用于发送 HTTP 请求
 
+// 定义一个网站对象的数组，每个网站包含标题、URL、描述、分类和标签
 const sites = [
   {
     title: "GitHub",
@@ -73,16 +74,25 @@ const sites = [
   }
 ];
 
+// 定义一个异步函数用于批量添加网站数据
 async function addSites() {
   try {
+    // 遍历 sites 数组，逐个发送 POST 请求将每个网站数据添加到数据库
     for (const site of sites) {
+      // 向本地的 API 发送 POST 请求，URL 为 http://localhost:5000/api/sites，数据为 site 对象
       const response = await axios.post('http://localhost:5000/api/sites', site);
+      
+      // 请求成功后，打印网站标题
       console.log(`Added: ${site.title}`);
     }
+    
+    // 所有网站都成功添加后，打印成功消息
     console.log('All sites have been added successfully!');
   } catch (error) {
+    // 如果请求失败，打印错误信息
     console.error('Error adding sites:', error.message);
   }
 }
 
-addSites(); 
+// 调用 addSites 函数执行批量添加操作
+addSites();

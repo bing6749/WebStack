@@ -1,5 +1,6 @@
-const axios = require('axios');
+const axios = require('axios'); // 引入 axios 用于发送 HTTP 请求
 
+// 定义网站信息数组，每个网站包括标题、URL、描述、分类和标签
 const sites = [
   {
     title: "Google",
@@ -73,32 +74,38 @@ const sites = [
   }
 ];
 
+// 定义一个异步函数，用于将网站信息批量添加到数据库
 async function seedData() {
   try {
+    // 遍历网站数组，逐个发送请求将网站数据添加到数据库
     for (const site of sites) {
       try {
+        // 发送 POST 请求到本地 API，向数据库中添加站点数据
         const response = await axios.post('http://localhost:5000/api/sites', site);
-        console.log(`Added: ${site.title}`);
+        console.log(`Added: ${site.title}`); // 请求成功时，打印成功消息
       } catch (error) {
+        // 捕获并打印添加单个网站时的错误信息
         console.error(`Error adding ${site.title}:`, {
-          message: error.message,
-          response: error.response?.data,
-          status: error.response?.status
+          message: error.message, // 错误信息
+          response: error.response?.data, // 错误响应数据（如果有）
+          status: error.response?.status // 错误的 HTTP 状态码（如果有）
         });
       }
     }
-    console.log('Seeding process completed!');
+    console.log('Seeding process completed!'); // 所有网站添加完成后，打印完成消息
   } catch (error) {
+    // 捕获整个种子过程中的错误
     console.error('Fatal error:', {
-      message: error.message,
-      stack: error.stack
+      message: error.message, // 错误信息
+      stack: error.stack // 错误的堆栈信息
     });
   }
 }
 
-// 添加错误处理
+// 添加未处理的 promise 拒绝（unhandledRejection）事件处理
 process.on('unhandledRejection', (error) => {
-  console.error('Unhandled rejection:', error);
+  console.error('Unhandled rejection:', error); // 捕获并打印未处理的拒绝错误
 });
 
-seedData(); 
+// 调用种子数据函数，开始批量添加网站信息
+seedData();
